@@ -38,7 +38,7 @@
 #include <ESP8266WiFi.h>
 const char* ssid  = "SSN";
 const char* password = "Ssn1!Som2@Sase3#";
-const char* host = "10.112.150.144";
+const char* host = "10.112.150.144";// replace it with the correct ip of the system
 const char* passcode = "YOUR_PASSCODE";
 constexpr uint8_t RST_PIN =D3; //2;          // Configurable, see typical pin layout above
 constexpr uint8_t SS_PIN = D4;//0;         // Configurable, see typical pin layout above
