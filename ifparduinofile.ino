@@ -36,9 +36,9 @@
 #include <SPI.h>
 #include <MFRC522.h>
 #include <ESP8266WiFi.h>
-const char* ssid  = "SSN";
-const char* password = "Ssn1!Som2@Sase3#";
-const char* host = "10.112.150.144";// replace it with the correct ip of the system
+const char* ssid  = "Hello";
+const char* password = "rino1234";
+const char* host = "192.168.43.155";// replace it with the correct ip of the system
 const char* passcode = "YOUR_PASSCODE";
 constexpr uint8_t RST_PIN =D3; //2;          // Configurable, see typical pin layout above
 constexpr uint8_t SS_PIN = D4;//0;         // Configurable, see typical pin layout above
@@ -49,9 +49,6 @@ void setup() {
 	Serial.begin(9600);		// Initialize serial communications with the PC
 	while (!Serial);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
 	SPI.begin();			// Init SPI bus
-	mfrc522.PCD_Init();		// Init MFRC522
-	mfrc522.PCD_DumpVersionToSerial();	// Show details of PCD - MFRC522 Card Reader details
-	Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
 
   Serial.print("Connecting to ");
   Serial.println(ssid);
@@ -61,9 +58,14 @@ void setup() {
     Serial.print(".");
   }
   Serial.println("");
+        
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+  mfrc522.PCD_Init();   // Init MFRC522
+  mfrc522.PCD_DumpVersionToSerial();  // Show details of PCD - MFRC522 Card Reader details
+  Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
+
 }
 
 void loop() {
@@ -72,8 +74,6 @@ void loop() {
    if (mfrc522.PICC_IsNewCardPresent()) { // (true, if RFID tag/card is present ) PICC = Proximity Integrated Circuit Card
     if(mfrc522.PICC_ReadCardSerial()) { // true, if RFID tag/card was read
       Serial.print("RFID TAG ID:");
-      
-      
       for (byte i = 0; i < mfrc522.uid.size; ++i) { // read id (in parts)
         //Serial.print(mfrc522.uid.uidByte[i]); // print id as hex values
         id+=mfrc522.uid.uidByte[i];
@@ -85,12 +85,12 @@ void loop() {
 
       //inserting data part
      WiFiClient client;
-     const int httpPort = 81;
+     const int httpPort = 3000;
      if (!client.connect(host, httpPort)) {
        Serial.println("Connection failed!");
         return;
       }
-      String url = "/arduino.php?s1=";
+      String url = "/insert/3^5/";
       url += id;
 
 
@@ -126,12 +126,12 @@ void loop() {
      
        if (!mfrc522.PICC_IsNewCardPresent()) {
        WiFiClient client;
-      const int httpPort = 81;
+      const int httpPort = 3000;
       if (!client.connect(host, httpPort)) {
         Serial.println("Connection failed!");
         return;
       }
-      String url = "/arduino.php?s1=empty";
+      String url = "/insert/3^5/empty";
 
 
        Serial.print("Requesting URL: ");
