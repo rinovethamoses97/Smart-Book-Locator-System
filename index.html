@@ -31,7 +31,7 @@
 	</head>
 	<body>	
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-			<a style="display:none" id="logotextmobile" class="navbar-brand mr-auto" href="#"><img width="85px" height="45px" src="SSN-02.jpg">  Smart Book Locator</a>
+			<a style="display:none" id="logotextmobile" class="navbar-brand mr-auto" href="#"><img width="85px" height="45px" src="/ssnlogo">  Smart Book Locator</a>
 			<a  id="logotextmonitor1" class="navbar-brand mr-auto" href="#"><img width="85px" height="45px" src="SSN-02.jpg"></a>
 			<a id="logotextmonitor" style="color:white;margin-left:30%;font-size:30px">Smart Book Locator</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,7 +97,7 @@
 								book_found_in_rack=true;
 								var rack=shelf[j].rack.split("^");
 								$("#result").html("<div class='alert alert-success'><strong>Book Found in Rack: "+rack[0]+" Section: "+rack[1]+"</strong></div>");
-								$("#rackimage").attr("src","/rackimages/rack"+rack[0]+".jpg");
+								$("#rackimage").attr("src","./rackimages/rack"+rack[0]+".jpg");
 								break;
 							}
 						}

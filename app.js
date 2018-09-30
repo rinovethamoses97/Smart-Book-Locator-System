@@ -11,6 +11,10 @@ admin.initializeApp({
 app.get('/',function(req,res){
 	res.sendFile(__dirname+'/index.html');
 });
+app.get('/ssnlogo',function(req,res){
+	res.sendFile(__dirname+'/SSN-02.jpg');
+});
+
 app.get('/insert/:rack/:id',function(req,res){
 	var db = admin.database();
 	var p1=req.params.id;
