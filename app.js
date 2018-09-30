@@ -8,6 +8,9 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://smartbooklocator.firebaseio.com"
 });
+app.get('/',function(req,res){
+	res.sendFile(__dirname+'/index.html');
+});
 app.get('/insert/:rack/:id',function(req,res){
 	var db = admin.database();
 	var p1=req.params.id;
