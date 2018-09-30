@@ -64,7 +64,7 @@
 				<div class="col-md-4">
 				</div>
 				<div class="col-md-4">
-					<img width="100%" id="rackimage">
+					<img style="display:none;" width="100%" id="rackimage">
 				</div>
 			</div>
 		</div>
@@ -97,18 +97,21 @@
 								book_found_in_rack=true;
 								var rack=shelf[j].rack.split("^");
 								$("#result").html("<div class='alert alert-success'><strong>Book Found in Rack: "+rack[0]+" Section: "+rack[1]+"</strong></div>");
+								$("#rackimage").css("display","block");
 								$("#rackimage").attr("src","/rackimages/rack"+rack[0]+".JPG");
 								break;
 							}
 						}
 						if(book_found_in_rack==false){
 								$("#result").html("<div class='alert alert-secondary'><strong>Book Not found in rack might be in reading table</strong></div>");
+								$("#rackimage").css("display","none");
 						}
 					});
 					return;
 				}
 			  }
 			  $("#result").html("<div class='alert alert-danger'>Book Not found</strong></div>");
+              $("#rackimage").css("display","none");			
 			})
 		});
 	});
