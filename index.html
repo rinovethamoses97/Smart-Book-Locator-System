@@ -1,0 +1,72 @@
+<html>
+	<head>
+		<title>Bootstrap Example</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+		<script>
+		// Initialize Firebase
+		var config = {
+			apiKey: "AIzaSyC1Y4-f4HltN7NsTym-OSaQiIVGFSTGjEI",
+			authDomain: "smartbooklocator.firebaseapp.com",
+			databaseURL: "https://smartbooklocator.firebaseio.com",
+			projectId: "smartbooklocator",
+			storageBucket: "smartbooklocator.appspot.com",
+			messagingSenderId: "516372622573"
+		};
+		firebase.initializeApp(config);
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="form-group">
+				<label for="book_name">Enter the Book Name:</label>
+				<input type="text" class="form-control" id="book_name" name="book_name">
+			</div>
+			<button type="button" class="btn btn-primary">Search</button>
+			<div id="result">
+			
+			</div>
+		</div>
+	</body>
+	<script>
+	
+	$("document").ready(function(){
+		$("button").click(function(){
+			var book_name=$("#book_name").val();
+			var books;
+			var book_id;
+			var book_found_in_rack=false;
+			firebase.database().ref('books/').once("value").then(function(snapshot){
+			  books=snapshot.val();
+			  for(var i in books){
+				if(books[i].name==book_name){
+				    console.log(books[i].id);
+					book_id=books[i].id
+					firebase.database().ref('shelf/').on("value",function(snapshot){
+						book_found_in_rack=false;
+						shelf=snapshot.val();
+						for(var j in shelf){
+							if(shelf[j].bookid==book_id){
+								book_found_in_rack=true;
+								$("#result").html("<div class='alert alert-success'><strong>Book Found in Rack:!"+shelf[j].rack+"</strong></div>");
+								break;
+							}
+						}
+						if(book_found_in_rack==false){
+								$("#result").html("<div class='alert alert-secondary'><strong>Book Not found in rack might be in reading table</strong></div>");
+						}
+					});
+					return;
+				}
+			  }
+			  $("#result").html("<div class='alert alert-danger'>Book Not found</strong></div>");
+			})
+		});
+	});
+	</script>
+</html>

@@ -13,7 +13,7 @@ app.get('/insert/:rack/:id',function(req,res){
 	var p1=req.params.id;
 	var rack=req.params.rack;
 	var ref1=db.ref('shelf/'+rack+"/");
-	ref1.update({bookid:p1});
+	ref1.update({bookid:p1,rack:rack});
 	res.send("success");
 });
  app.listen(process.env.PORT || 3000,function(){
