@@ -38,7 +38,7 @@
 #include <ESP8266WiFi.h>
 const char* ssid  = "Hello";
 const char* password = "rino1234";
-const char* host = "192.168.43.155";// replace it with the correct ip of the system
+const char* host = "smartbooklocator.herokuapp.com";// replace it with the correct ip of the system
 const char* passcode = "YOUR_PASSCODE";
 constexpr uint8_t RST_PIN =D3; //2;          // Configurable, see typical pin layout above
 constexpr uint8_t SS_PIN = D4;//0;         // Configurable, see typical pin layout above
@@ -85,7 +85,7 @@ void loop() {
 
       //inserting data part
      WiFiClient client;
-     const int httpPort = 3000;
+     const int httpPort = 80;
      if (!client.connect(host, httpPort)) {
        Serial.println("Connection failed!");
         return;
@@ -126,7 +126,7 @@ void loop() {
      
        if (!mfrc522.PICC_IsNewCardPresent()) {
        WiFiClient client;
-      const int httpPort = 3000;
+      const int httpPort = 80;
       if (!client.connect(host, httpPort)) {
         Serial.println("Connection failed!");
         return;
