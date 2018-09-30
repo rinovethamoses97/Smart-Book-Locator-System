@@ -2,6 +2,7 @@ var express=require('express');
 var app=express();
 var cors=require('cors');
 app.use(cors());
+app.use(express.static(__dirname+'/public'));
 var admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKey.json");
 admin.initializeApp({
@@ -9,10 +10,7 @@ admin.initializeApp({
   databaseURL: "https://smartbooklocator.firebaseio.com"
 });
 app.get('/',function(req,res){
-	res.sendFile(__dirname+'/index.html');
-});
-app.get('/ssnlogo',function(req,res){
-	res.sendFile(__dirname+'/SSN-02.jpg');
+	res.sendFile('/index.html');
 });
 
 app.get('/insert/:rack/:id',function(req,res){

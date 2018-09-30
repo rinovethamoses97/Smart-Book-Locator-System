@@ -25,14 +25,14 @@
 				background-image:url();
 			}
 			#result{
-				padding:10px;
+				padding-top:10px;
 			}
 		</style
 	</head>
 	<body>	
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-			<a style="display:none" id="logotextmobile" class="navbar-brand mr-auto" href="#"><img width="85px" height="45px" src="/ssnlogo">  Smart Book Locator</a>
-			<a  id="logotextmonitor1" class="navbar-brand mr-auto" href="#"><img width="85px" height="45px" src="SSN-02.jpg"></a>
+			<a style="display:none" id="logotextmobile" class="navbar-brand mr-auto" href="#"><img width="85px" height="45px" src="/SSN-02.jpg">  Smart Book Locator</a>
+			<a  id="logotextmonitor1" class="navbar-brand mr-auto" href="#"><img width="85px" height="45px" src="/SSN-02.jpg"></a>
 			<a id="logotextmonitor" style="color:white;margin-left:30%;font-size:30px">Smart Book Locator</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -56,7 +56,7 @@
 				<label for="book_name"><strong>Enter the Book Name:</strong></label>
 				<input type="text" class="form-control" id="book_name" name="book_name">
 			</div>
-			<button type="button" class="btn btn-primary">Search</button>
+			<button id="search" type="button" class="btn btn-primary">Search</button>
 			<div id="result">
 			
 			</div>
@@ -78,7 +78,7 @@
 			
 			document.getElementById("logotextmonitor1").style.display="none";	
 		}
-		$("button").click(function(){
+		$("#search").click(function(){
 			var book_name=$("#book_name").val();
 			var books;
 			var book_id;
@@ -97,7 +97,7 @@
 								book_found_in_rack=true;
 								var rack=shelf[j].rack.split("^");
 								$("#result").html("<div class='alert alert-success'><strong>Book Found in Rack: "+rack[0]+" Section: "+rack[1]+"</strong></div>");
-								$("#rackimage").attr("src","./rackimages/rack"+rack[0]+".jpg");
+								$("#rackimage").attr("src","/rackimages/rack"+rack[0]+".jpg");
 								break;
 							}
 						}
