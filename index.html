@@ -53,7 +53,8 @@
 						for(var j in shelf){
 							if(shelf[j].bookid==book_id){
 								book_found_in_rack=true;
-								$("#result").html("<div class='alert alert-success'><strong>Book Found in Rack:!"+shelf[j].rack+"</strong></div>");
+								var rack=shelf[j].rack.split("^");
+								$("#result").html("<div class='alert alert-success'><strong>Book Found in Rack: "+rack[0]+" Section: "+rack[1]+"</strong></div>");
 								break;
 							}
 						}
