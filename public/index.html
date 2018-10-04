@@ -21,13 +21,12 @@
 		firebase.initializeApp(config);
 		</script>
 		<style>
-			body{
-				background-image:url();
-			}
 			#result{
 				padding-top:10px;
 			}
-
+			#suggestion{
+				background-color: #FAFAFA;	
+			}
 		</style>
 	</head>
 	<body>	
@@ -86,11 +85,43 @@
 		</div>
 	</body>
 	<script>
+	var cursor_position=-1;
+	var books_array=new Array()//for cursor operation;
+	var suggestion_flag=false;
 	function renderbook(id){
 			$("#suggestion").html("");
-			$("input").val(id);
+			$("input").val(books_array[id].name);
+			suggestion_flag=false;
 	}
 	$("document").ready(function(){
+		
+		$(document).keydown(function(event){
+			if(event.originalEvent.key=="ArrowDown" && suggestion_flag){
+				console.log(cursor_position);
+				if(cursor_position!=-1)
+					$("#"+cursor_position).css("color","black");
+				cursor_position++;
+				cursor_position=cursor_position%books_array.length;
+				console.log(cursor_position);
+				$("#"+cursor_position).css("color","red");
+			}
+			else if(event.originalEvent.key=="ArrowUp" && suggestion_flag){
+				// if(cursor_position!=-1)
+				// 	$("#"+cursor_position).css("color","black");
+				// 	cursor_position--;
+				// if(cursor_position!=-1)
+				// 	cursor_position=books_array.length-1;
+				// console.log(cursor_position);
+				// $("#"+cursor_position).css("color","red");
+			}
+			else if(event.originalEvent.key=="Enter" && suggestion_flag){
+				if(cursor_position!=-1){
+					$("input").val(books_array[cursor_position].name);
+					$("#suggestion").html(" ");
+					suggestion_flag=false;
+				}
+			}
+		});
 		if(screen.width<380){
 			document.getElementById("logotextmonitor").style.display="none";
 			document.getElementById("logotextmobile").style.display="block";
@@ -98,25 +129,44 @@
 			document.getElementById("logotextmonitor1").style.display="none";	
 		}
 		
-		var getsuggestion=function(){
+		var getsuggestion=function(event){
+			if(event.originalEvent.key=="ArrowDown" || event.originalEvent.key=="Enter"){
+				return;
+			}
+			console.log("called");
+			cursor_position=-1;
 			var html=""
 			var book_name=$("input").val();
 			if(book_name=="" || book_name==" "){
 				$("#suggestion").html("");
+				suggestion_flag=false;
 				return;
 			}
 			firebase.database().ref('books/').once("value").then(function(snapshot){
 			  books=snapshot.val();
+			  var j=0;
+			  books_array=new Array();
 			  for(var i in books){
-					if(books[i].name.indexOf(book_name) !== -1){
-						html+="<div style='padding-left:15px;cursor:pointer;' class='row' id='"+books[i].name+"' onclick='renderbook(this.id)'>"
+					if(books[i].name.toLowerCase().indexOf(book_name.toLowerCase()) !== -1){
+						html+="<div style='padding-left:15px;cursor:pointer;color:black' class='row' id='"+j+"' onclick='renderbook(this.id)'>"
 					          +"<div class='col-md-12'>"
 						      +books[i].name
 					          +"</div>"
 				              +"</div><hr>"
+				        books_array[j]=new Object();
+			  			books_array[j]["bookid"]=i;
+			  			books_array[j]["name"]=books[i].name;
+				        j++;
 					}
+
 			  }
 			  $("#suggestion").html(html);
+			  if(html==""){
+			  	suggestion_flag=false;
+			  }
+			  else{
+			  	suggestion_flag=true;
+			  }
 			});
 		}
 
