@@ -90,7 +90,7 @@ void loop() {
        Serial.println("Connection failed!");
         return;
       }
-      String url = "/insert/3^5/";
+      String url = "/insert/4^3/";
       url += id;
 
 
@@ -131,7 +131,7 @@ void loop() {
         Serial.println("Connection failed!");
         return;
       }
-      String url = "/insert/3^5/empty";
+      String url = "/insert/4^3/empty";
 
 
        Serial.print("Requesting URL: ");

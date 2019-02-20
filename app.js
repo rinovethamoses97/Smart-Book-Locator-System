@@ -12,7 +12,9 @@ admin.initializeApp({
 app.get('/',function(req,res){
 	res.sendFile('/index.html');
 });
-
+app.get('/search',function(req,res){
+	res.sendFile(__dirname+'/public/search.html');
+});
 app.get('/insert/:rack/:id',function(req,res){
 	var db = admin.database();
 	var p1=req.params.id;
