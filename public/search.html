@@ -18,7 +18,7 @@
 			}
 		</style>
 	</head>
-	<body>	
+	<body style="display: none;">	
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 			<a style="display:none" id="logotextmobile" class="navbar-brand mr-auto" href="#"><img width="85px" height="45px" src="/SSN-02.JPG">  Smart Book Locator</a>
 			<a  id="logotextmonitor1" class="navbar-brand mr-auto" href="#"><img width="85px" height="45px" src="/SSN-02.JPG"></a>
@@ -79,7 +79,6 @@
 	<script>
 	window.onload=checkloginstatus;
 	function checkloginstatus(){
-		$("body").hide();
 		$.post("/getloginstatus",function(data,status){
 			if(data.status=="false"){
 				window.location="/";
