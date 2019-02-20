@@ -37,6 +37,9 @@
 					<li class="nav-item">
 						<a class="nav-link disabled" href="#">Contact</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" style="cursor:pointer;" onclick="signout()">Signout</a>
+					</li>
 				</ul>
 			</div>
 		</nav>
@@ -74,6 +77,14 @@
 		</div>
 	</body>
 	<script>
+	window.onload=checkloginstatus;
+	function checkloginstatus(){
+		$.post("/getloginstatus",function(data,status){
+			if(data.status=="false"){
+				window.location="/";
+			}
+		});
+	}
 	var cursor_position=-1;
 	var books_array=new Array()//for cursor operation;
 	var suggestion_flag=false;
@@ -194,5 +205,16 @@
 			})
 		});
 	});
+	function signout(){
+		firebase.auth().signOut().then(function(){
+			$.post("/setloginstatus",{status:false},function(data,status){
+				if(data=="done"){
+					window.location="/";
+				}
+			})
+		}).catch(function(){
+
+		})
+	}
 	</script>
 </html>
