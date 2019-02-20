@@ -8,18 +8,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
-		<script>
-		// Initialize Firebase
-		var config = {
-			apiKey: "AIzaSyC1Y4-f4HltN7NsTym-OSaQiIVGFSTGjEI",
-			authDomain: "smartbooklocator.firebaseapp.com",
-			databaseURL: "https://smartbooklocator.firebaseio.com",
-			projectId: "smartbooklocator",
-			storageBucket: "smartbooklocator.appspot.com",
-			messagingSenderId: "516372622573"
-		};
-		firebase.initializeApp(config);
-		</script>
+		<script type="text/javascript" src="firebase_init.js"></script>
 		<style>
 			#result{
 				padding-top:10px;
@@ -52,161 +41,40 @@
 			</div>
 		</nav>
 		<div class="container">
-			<div class="row" style="padding-bottom: 15px;">
-					<div class="col-md-12">
-						<label for="book_name"><strong>Enter the Book Name:</strong></label>
-						<input type="text" class="form-control" id="book_name" name="book_name">
-					</div>			
-			</div>
-			<div id="suggestion">
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<div class="row">
-						<div class="col-md-12">
-							<button id="search" type="button" class="btn btn-primary">Search</button>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-12">
-							<div id="result">
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-4">
-				</div>
-				<div class="col-md-4">
-					<img style="display:none;" width="100%" id="rackimage">
-				</div>
-			</div>
+			<h2>Login</h2>
+  			<form action="" method="post">
+    			<div class="form-group">
+      				<label for="email">Email:</label>
+      				<input type="email" class="form-control" id="email" placeholder="Enter email" name="email" required>
+    			</div>
+    			<div class="form-group">
+      				<label for="pwd">Password:</label>
+      				<input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd" required>
+    			</div>
+    			<button type="submit" id="loginbutton" class="btn btn-primary">Submit</button>
+  			</form>
 		</div>
 	</body>
-	<script>
-	var cursor_position=-1;
-	var books_array=new Array()//for cursor operation;
-	var suggestion_flag=false;
-	function renderbook(id){
-			$("#suggestion").html("");
-			$("input").val(books_array[id].name);
-			suggestion_flag=false;
-	}
-	$("document").ready(function(){
-		
-		$(document).keydown(function(event){
-			if(event.originalEvent.key=="ArrowDown" && suggestion_flag){
-				console.log(cursor_position);
-				if(cursor_position!=-1)
-					$("#"+cursor_position).css("color","black");
-				cursor_position++;
-				cursor_position=cursor_position%books_array.length;
-				console.log(cursor_position);
-				$("#"+cursor_position).css("color","red");
-			}
-			else if(event.originalEvent.key=="ArrowUp" && suggestion_flag){
-				// if(cursor_position!=-1)
-				// 	$("#"+cursor_position).css("color","black");
-				// 	cursor_position--;
-				// if(cursor_position!=-1)
-				// 	cursor_position=books_array.length-1;
-				// console.log(cursor_position);
-				// $("#"+cursor_position).css("color","red");
-			}
-			else if(event.originalEvent.key=="Enter" && suggestion_flag){
-				if(cursor_position!=-1){
-					$("input").val(books_array[cursor_position].name);
-					$("#suggestion").html(" ");
-					suggestion_flag=false;
-				}
-			}
-		});
+	<script type="text/javascript">
 		if(screen.width<380){
 			document.getElementById("logotextmonitor").style.display="none";
-			document.getElementById("logotextmobile").style.display="block";
-			
+			document.getElementById("logotextmobile").style.display="block";	
 			document.getElementById("logotextmonitor1").style.display="none";	
 		}
-		
-		var getsuggestion=function(event){
-			if(event.originalEvent.key=="ArrowUp" || event.originalEvent.key=="ArrowDown" || event.originalEvent.key=="Enter"){
-				return;
-			}
-			console.log("called");
-			cursor_position=-1;
-			var html=""
-			var book_name=$("input").val();
-			if(book_name=="" || book_name==" "){
-				$("#suggestion").html("");
-				suggestion_flag=false;
-				return;
-			}
-			firebase.database().ref('books/').once("value").then(function(snapshot){
-			  books=snapshot.val();
-			  var j=0;
-			  books_array=new Array();
-			  for(var i in books){
-					if(books[i].name.toLowerCase().indexOf(book_name.toLowerCase()) !== -1){
-						html+="<div style='padding-left:15px;cursor:pointer;color:black' class='row' id='"+j+"' onclick='renderbook(this.id)'>"
-					          +"<div class='col-md-12'>"
-						      +books[i].name
-					          +"</div>"
-				              +"</div><hr>"
-				        books_array[j]=new Object();
-			  			books_array[j]["bookid"]=i;
-			  			books_array[j]["name"]=books[i].name;
-				        j++;
-					}
-
-			  }
-			  $("#suggestion").html(html);
-			  if(html==""){
-			  	suggestion_flag=false;
-			  }
-			  else{
-			  	suggestion_flag=true;
-			  }
+		$("form").submit(function(){
+			event.preventDefault();
+			var email=$("#email").val();
+			var password=$("#pwd").val();
+			firebase.auth().signInWithEmailAndPassword(email, password).then(function(){
+				alert("Success");
+				// window.location="/search";
+			}).catch(function(error) {
+  				var errorCode = error.code;
+  				var errorMessage = error.message;
+  				alert("Login Failed");
+  				$("#email").val("");
+  				$("#pwd").val("");
 			});
-		}
-
-		$("input").keyup(getsuggestion);
-		$("#search").click(function(){
-			var book_name=$("#book_name").val();
-			var books;
-			var book_id;
-			var book_found_in_rack=false;
-			firebase.database().ref('books/').once("value").then(function(snapshot){
-			  books=snapshot.val();
-			  for(var i in books){
-				if(books[i].name==book_name){
-				    console.log(books[i].id);
-					book_id=books[i].id
-					firebase.database().ref('shelf/').on("value",function(snapshot){
-						book_found_in_rack=false;
-						shelf=snapshot.val();
-						for(var j in shelf){
-							if(shelf[j].bookid==book_id){
-								book_found_in_rack=true;
-								var rack=shelf[j].rack.split("^");
-								$("#result").html("<div class='alert alert-success'><strong>Book Found in Rack: "+rack[0]+" Section: "+rack[1]+"</strong></div>");
-								$("#rackimage").css("display","block");
-								$("#rackimage").attr("src","/rackimages/rack"+rack[0]+".JPG");
-								break;
-							}
-						}
-						if(book_found_in_rack==false){
-								$("#result").html("<div class='alert alert-secondary'><strong>Book Not found in rack might be in reading table</strong></div>");
-								$("#rackimage").css("display","none");
-						}
-					});
-					return;
-				}
-			  }
-			  $("#result").html("<div class='alert alert-danger'>Book Not found</strong></div>");
-              $("#rackimage").css("display","none");			
-			})
-		});
-	});
+		})
 	</script>
 </html>
