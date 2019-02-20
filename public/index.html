@@ -67,7 +67,7 @@
 			var password=$("#pwd").val();
 			firebase.auth().signInWithEmailAndPassword(email, password).then(function(){
 				alert("Success");
-				// window.location="/search";
+				window.location="/search";
 			}).catch(function(error) {
   				var errorCode = error.code;
   				var errorMessage = error.message;
